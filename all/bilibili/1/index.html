@@ -1,50 +1,68 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>小说观看</title>  
-    <script>  
-    var folders = {};
-    for (var i = 1; i <= 100; i++) {
-     folders[i] = {images: 20};
-    }
-
-    var currentFolder = "1";  
-    var imageCount = 1;  
-    var totalFolders = Object.keys(folders).length;  
-    var currentFolderImages = folders[currentFolder].images;  
-  
-    function changeImage(increment) {  
-        imageCount += increment;  
-          
-        // 检查当前图片是否超出当前文件夹的图片数量  
-        if (imageCount > currentFolderImages) {  
-            // 如果超出，则切换到下一个文件夹  
-            var folderKeys = Object.keys(folders);  
-            var currentFolderIndex = folderKeys.indexOf(currentFolder);  
-            currentFolderIndex = (currentFolderIndex + increment + folderKeys.length) % folderKeys.length; // 循环遍历文件夹  
-            currentFolder = folderKeys[currentFolderIndex];  
-            currentFolderImages = folders[currentFolder].images;  
-            imageCount = 1; // 重置图片计数  
-        } else if (imageCount <= 0) {  
-            // 如果图片计数小于等于0，则切换到上一个文件夹并显示最后一张图片  
-            var folderKeys = Object.keys(folders);  
-            var currentFolderIndex = folderKeys.indexOf(currentFolder);  
-            currentFolderIndex = (currentFolderIndex + folderKeys.length - 1) % folderKeys.length; // 循环遍历文件夹  
-            currentFolder = folderKeys[currentFolderIndex];  
-            currentFolderImages = folders[currentFolder].images;  
-            imageCount = currentFolderImages; // 显示最后一张图片  
-        }  
-          
-        // 更新图片源  
-        document.getElementById("image").src = currentFolder + "/" + imageCount + ".jpg";  
+<!DOCTYPE html>    
+<html lang="en">    
+<head>    
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>小说观看</title>    
+    <script>    
+    var folders = {};  
+    for (var i = 1; i <= 100; i++) {  
+        folders[i] = {images: 20};  
     }  
-    </script>  
-</head>  
-<body>  
-    <img id="image" src="1/1.jpg" alt="图片">  
-    <button onclick="changeImage(-1)">上一页</button>  
-    <button onclick="changeImage(1)">下一页</button>  
-</body>  
+  
+    var currentFolder = "1";    
+    var imageCount = 1;    
+    var totalFolders = Object.keys(folders).length;    
+    var currentFolderImages = folders[currentFolder].images;    
+  
+    function changeImage(increment) {    
+        imageCount += increment;    
+            
+        // 检查当前图片是否超出当前文件夹的图片数量    
+        if (imageCount > currentFolderImages) {    
+            // 如果超出，则切换到下一个文件夹    
+            var folderKeys = Object.keys(folders);    
+            var currentFolderIndex = folderKeys.indexOf(currentFolder);    
+            currentFolderIndex = (currentFolderIndex + increment) % folderKeys.length;    
+            currentFolder = folderKeys[currentFolderIndex];    
+            currentFolderImages = folders[currentFolder].images;    
+            imageCount = 1; // 重置图片计数    
+        } else if (imageCount <= 0) {    
+            // 如果图片计数小于等于0，则切换到上一个文件夹并显示最后一张图片    
+            var folderKeys = Object.keys(folders);    
+            var currentFolderIndex = folderKeys.indexOf(currentFolder);    
+            currentFolderIndex = (currentFolderIndex + folderKeys.length - 1) % folderKeys.length;    
+            currentFolder = folderKeys[currentFolderIndex];    
+            currentFolderImages = folders[currentFolder].images;    
+            imageCount = currentFolderImages; // 显示最后一张图片    
+        }    
+            
+        // 更新图片源    
+        document.getElementById("image").src = currentFolder + "/" + imageCount + ".jpg";    
+        document.getElementById("current-page").textContent = `当前页数: ${currentFolder}/${imageCount}`;  
+    }    
+  
+    function jumpToPage(page) {  
+        var targetFolder = Math.ceil(page / currentFolderImages);  
+        var targetImage = page % currentFolderImages;  
+        if (targetFolder < 1) targetFolder = 1;  
+        if (targetFolder > totalFolders) targetFolder = totalFolders;  
+        if (targetImage < 1) targetImage = 1;  
+        if (targetImage > currentFolderImages) targetImage = currentFolderImages;  
+          
+        currentFolder = targetFolder.toString();  
+        imageCount = targetImage;  
+        changeImage(0); // 不需要增减，直接更新图片  
+    }  
+    </script>    
+</head>    
+<body>    
+    <img id="image" src="1/1.jpg" alt="图片">    
+    <p id="current-page">当前页数: 1/1</p>  
+    <button onclick="changeImage(-1)">上一页</button>    
+    <button onclick="changeImage(1)">下一页</button>    
+    <label for="page-input">跳转到页数:</label>  
+    <input type="number" id="page-input" min="1" max="2000" placeholder="输入1-2000的页数">  
+    <button onclick="jumpToPage(parseInt(document.getElementById('page-input').value, 10))">跳转</button>  
+</body>    
 </html>
