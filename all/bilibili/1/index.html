@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>小说观看</title>
+<script>
+var imagePath = "/all/bilibili/1/1/";
+var imageCount = 1;
+var totalImages = 20;
+
+function changeImage(increment) {
+    imageCount += increment;
+    if (imageCount > totalImages) {
+        imageCount = 1;
+        imagePath = "/all/bilibili/2/1/";
+        totalImages = 20;
+    } else if (imageCount <= 0) {
+        imageCount = totalImages;
+        imagePath = "/all/bilibili/1/1/";
+        totalImages = 20;
+    }
+    document.getElementById("image").src = imagePath + imageCount + ".png";
+}
+</script>
+</head>
+<body>
+<img id="image" src="/all/bilibili/1/1/1.png" alt="图片">
+<button onclick="changeImage(-1)">上一张图片</button>
+<button onclick="changeImage(1)">下一张图片</button>
+</body>
+</html>
