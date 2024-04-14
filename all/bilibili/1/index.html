@@ -1,32 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小说观看</title>
-<script>
-var imagePath = "1/";
-var imageCount = 1;
-var totalImages = 20;
-
-function changeImage(increment) {
-    imageCount += increment;
-    if (imageCount > totalImages) {
-        imageCount = 1;
-        imagePath = "2/";
-        totalImages = 20;
-    } else if (imageCount <= 0) {
-        imageCount = totalImages;
-        imagePath = "1/";
-        totalImages = 20;
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>小说观看</title>  
+    <script>  
+    var folders = {};
+    for (var i = 1; i <= 100; i++) {
+     folders[i] = {images: 20};
     }
-    document.getElementById("image").src = imagePath + imageCount + ".jpg";
-}
-</script>
-</head>
-<body>
-<img id="image" src="1/1.jpg" alt="图片">
-<button onclick="changeImage(-1)">上一张图片</button>
-<button onclick="changeImage(1)">下一张图片</button>
-</body>
+
+    var currentFolder = "1";  
+    var imageCount = 1;  
+    var totalFolders = Object.keys(folders).length;  
+    var currentFolderImages = folders[currentFolder].images;  
+  
+    function changeImage(increment) {  
+        imageCount += increment;  
+          
+        // 检查当前图片是否超出当前文件夹的图片数量  
+        if (imageCount > currentFolderImages) {  
+            // 如果超出，则切换到下一个文件夹  
+            var folderKeys = Object.keys(folders);  
+            var currentFolderIndex = folderKeys.indexOf(currentFolder);  
+            currentFolderIndex = (currentFolderIndex + increment + folderKeys.length) % folderKeys.length; // 循环遍历文件夹  
+            currentFolder = folderKeys[currentFolderIndex];  
+            currentFolderImages = folders[currentFolder].images;  
+            imageCount = 1; // 重置图片计数  
+        } else if (imageCount <= 0) {  
+            // 如果图片计数小于等于0，则切换到上一个文件夹并显示最后一张图片  
+            var folderKeys = Object.keys(folders);  
+            var currentFolderIndex = folderKeys.indexOf(currentFolder);  
+            currentFolderIndex = (currentFolderIndex + folderKeys.length - 1) % folderKeys.length; // 循环遍历文件夹  
+            currentFolder = folderKeys[currentFolderIndex];  
+            currentFolderImages = folders[currentFolder].images;  
+            imageCount = currentFolderImages; // 显示最后一张图片  
+        }  
+          
+        // 更新图片源  
+        document.getElementById("image").src = currentFolder + "/" + imageCount + ".jpg";  
+    }  
+    </script>  
+</head>  
+<body>  
+    <img id="image" src="1/1.jpg" alt="图片">  
+    <button onclick="changeImage(-1)">上一页</button>  
+    <button onclick="changeImage(1)">下一页</button>  
+</body>  
 </html>
