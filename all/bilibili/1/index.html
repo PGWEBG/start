@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>小说观看</title>
 <script>
-var imagePath = "/all/bilibili/1/1/";
+var imagePath = "start/all/bilibili/1/1/";
 var imageCount = 1;
 var totalImages = 20;
 
@@ -13,7 +13,7 @@ function changeImage(increment) {
     imageCount += increment;
     if (imageCount > totalImages) {
         imageCount = 1;
-        imagePath = "start/all/bilibili/1/2/";
+        imagePath = "start/all/bilibili/2/1/";
         totalImages = 20;
     } else if (imageCount <= 0) {
         imageCount = totalImages;
